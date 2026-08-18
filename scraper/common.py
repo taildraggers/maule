@@ -209,22 +209,25 @@ def is_non_aircraft_ad(title: str) -> bool:
 
 
 def format_aircraft_title(title: str, page_text: str, extract_model) -> str | None:
-    """Build a canonical 'YEAR MAKE MODEL' title, or return None if this
-    listing isn't a clean, identifiable whole-aircraft-for-sale ad.
+    """Build a canonical 'YEAR MAKE MODEL' title (or just 'MAKE MODEL' if no
+    model year could be found), or return None if this listing isn't a
+    clean, identifiable whole-aircraft-for-sale ad.
 
     extract_model(title) must return an (make, model) tuple, or None if no
-    recognized model is present in the title.
+    recognized model is present in the title. A missing model is still
+    disqualifying - a missing year is not, since plenty of genuine ads
+    simply don't state one in the title.
     """
     if is_non_aircraft_ad(title):
-        return None
-    year = extract_listing_year(title, page_text)
-    if not year:
         return None
     result = extract_model(title)
     if not result:
         return None
     make, model = result
-    return f"{year} {make} {model}"
+    year = extract_listing_year(title, page_text)
+    if year:
+        return f"{year} {make} {model}"
+    return f"{make} {model}"
 
 
 @dataclass

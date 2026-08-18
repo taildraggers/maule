@@ -21,14 +21,14 @@ by title against a small allowlist of Maule product names
 publishing.
 
 On top of that brand allowlist, only whole-aircraft-for-sale listings are
-kept. Each ad's title must state a model year and match a recognized Maule
-model code (see `_extract_model` in `scraper/barnstormers.py`); titles that
-read as parts, accessories, services, or raffles are dropped. Every
-surviving listing's title is rewritten to a canonical **`YEAR Maule MODEL`**
-form (e.g. `2015 Maule M-7-235`), regardless of how the original ad was
-worded, so the page reads consistently. A real side effect: ads that never
-state a model year in the title can't be reformatted and are dropped too,
-even if they're genuine aircraft.
+kept. Each ad's title must match a recognized Maule model code (see
+`_extract_model` in `scraper/barnstormers.py`); titles that read as parts,
+accessories, services, or raffles are dropped. Every surviving listing's
+title is rewritten to a canonical **`YEAR Maule MODEL`** form when the ad
+states a model year (e.g. `2015 Maule M-7-235`), or just **`Maule MODEL`**
+when it doesn't - a missing year isn't disqualifying, since plenty of
+genuine ads simply don't state one in the title - regardless of how the
+original ad was worded, so the page reads consistently.
 
 ## How it works
 
