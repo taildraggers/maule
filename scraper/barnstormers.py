@@ -154,9 +154,22 @@ def _parse_detail_page(url: str, html: str) -> Listing | None:
         return None
 
     if not _matches_target_models(title):
+        print(f"  [debug] dropped (title no longer matches brand allowlist): {title!r}")
         return None
 
     text = soup.get_text(" ", strip=True)
+
+    from .common import extract_listing_year, is_non_aircraft_ad  # temporary debug import
+
+    if is_non_aircraft_ad(title):
+        print(f"  [debug] dropped (looks like parts/service/raffle): {title!r}")
+        return None
+    if not extract_listing_year(title, text):
+        print(f"  [debug] dropped (no model year found): {title!r}")
+        return None
+    if not _extract_model(title):
+        print(f"  [debug] dropped (no recognized Maule model code): {title!r}")
+        return None
 
     formatted_title = format_aircraft_title(title, text, _extract_model)
     if not formatted_title:
